@@ -1,15 +1,17 @@
 from datetime import datetime
+from datetime import timedelta
 now = datetime.now()
 def num_words(args): #funcion que da cantidad de palabras
     words = args.split()
     quantity = len(words)
     return quantity
 
-def t_day():
+def t_day(): #Funcion que da fecha actual, la convierte en string y luego la almacena en array
     today = str(now.date())
     x = today.split('-')
     return x
 
+#(2024-10-26) == '2024-10-26'
 
 
 class Homework: #Clase Padre - se usará más adelante para el gestor
@@ -44,21 +46,27 @@ class Homework: #Clase Padre - se usará más adelante para el gestor
 
     def set_date(self, year, month, day):#Pide fecha al usuario y la compara con la fecha actual
         date = []
-        if str(type(year)) != "<class 'str'>":
+        if str(type(year)) != "<class 'str'>" and year > 0:
             date.append(year)
         else:
-            print('Ingresa el año como valor númerico')
-        if str(type(month)) != "<class 'str'>":
+            print('Ingresa año valido')
+        if str(type(month)) != "<class 'str'>" and month > 0 and month < 13:
             date.append(month)
         else:
-            print('Ingresa el mes como valor númerico')
-        if str(type(day)) != "<class 'str'>":
+            print('Ingresa un mes valido')
+        if str(type(day)) != "<class 'str'>" and day > 0 and day < 32:
             date.append(day)
         else:
-            print('Ingresa el dia como valor númerico')
+            print('Ingresa un dia valido')
+        
 
-        today = t_day() #una funcion que me retorna un array con valores string de la fecha actual
-        pass
+        tday = t_day() #una funcion que me retorna un array con valores string de la fecha actual
+        today = datetime(int(tday[0]), int(tday[1]), int(tday[2]))
+        last_day = datetime(date[0], date[1], date[2])
+        diference = last_day - today
+        remain_days = diference.days #el .days me ayuda a mostrar los dias restante del resto de arriba
+        return remain_days
+
 
 class M_Homework(Homework):#Clase de gestion de tarea - hereda la clase homework
     def save(self, titule): # guardar(crear) archivo con tarea inicial
