@@ -1,5 +1,4 @@
 from datetime import datetime
-from datetime import timedelta
 now = datetime.now()
 def num_words(args): #funcion que da cantidad de palabras
     words = args.split()
@@ -30,35 +29,59 @@ class Homework: #Clase Padre - se usará más adelante para el gestor
         else:
             print('No hay nada que mostrar!')
 
-    def set_name(self, name):#Cambia nombre y valida si mantiene limite de palabras
-        if num_words(name) < 5:
-            self.name = name
-            return self.name
-        else:
-            print('Límite es de 4 palabras!!')
+    def set_name(self):#Cambia nombre y valida si mantiene limite de palabras
+        while True:
+            name = input('Ingresa nombre de tarea : ')
+            if num_words(name) < 5:
+                self.name = name
+                return self.name
+            else:
+                print('Límite es de 4 palabras!!')
 
-    def set_description(self, description):#Cambia descripcion y valida si mantiene limite de palabras
-        if num_words(description) < 15:
-            self.description = description
-            return self.description
-        else:
-            print('Límite es de 14 palabras!!')
 
-    def set_date(self, year, month, day):#Pide fecha al usuario y la compara con la fecha actual
+    def set_description(self):#Cambia descripcion y valida si mantiene limite de palabras
+        while True:
+            description = input('Ingrese descripcion : ')
+            if num_words(description) < 15:
+                self.description = description
+                return self.description
+            else:
+                print('Límite es de 14 palabras!!')
+
+    def set_date(self):#Pide fecha al usuario y la compara con la fecha actual
         date = []
-        if str(type(year)) != "<class 'str'>" and year > 0:
-            date.append(year)
-        else:
-            print('Ingresa año valido')
-        if str(type(month)) != "<class 'str'>" and month > 0 and month < 13:
-            date.append(month)
-        else:
-            print('Ingresa un mes valido')
-        if str(type(day)) != "<class 'str'>" and day > 0 and day < 32:
-            date.append(day)
-        else:
-            print('Ingresa un dia valido')
-        
+        while True:
+            try:
+                year = int(input('Ingresa el año : '))
+                if year > 0:
+                    date.append(year)
+                    break
+                else:
+                    print('Ingresa año valido')
+            except ValueError:
+                print('no xupapi te estas pasando')
+
+        while True:
+            try:
+                month = int(input('Ingrese el mes : '))
+                if 0 < month < 13:
+                    date.append(month)
+                    break
+                else:
+                    print('Ingresa un mes valido')
+            except ValueError:
+                print('Nuh uh, ingresa valor numerico')
+
+        while True:
+            try:
+                day = int(input('Ingrese el dia : '))
+                if 0 < day < 32:
+                    date.append(day)
+                    break
+                else:
+                    print('Ingresa un dia valido')
+            except ValueError:
+                print('Nuh uh, ingresa valor valido')
 
         tday = t_day() #una funcion que me retorna un array con valores string de la fecha actual
         today = datetime(int(tday[0]), int(tday[1]), int(tday[2]))
@@ -69,22 +92,33 @@ class Homework: #Clase Padre - se usará más adelante para el gestor
 
 
 class M_Homework(Homework):#Clase de gestion de tarea - hereda la clase homework
+
+    def priority(self):
+        re_days = self.set_date()
+        if 0 <= re_days < 5:
+            return 'ALTA'
+        elif 5 <= re_days < 9:
+            return 'MEDIA'
+        elif re_days >= 9:
+            return 'BAJA'
+        else:
+            print('Loco esa vaina no existe')
+            return 'CADUCADO'
+
+
+
     def save(self, titule): # guardar(crear) archivo con tarea inicial
         titule += '.txt'
         arch = open(f'file/{titule}', 'w')
-        arch.write(f'[☺︎ {self.set_name(name = input('Ingresa nombre de tarea : '))} (PENDIENTE)')
+        arch.write(f'[☺︎ {self.set_name()} (PENDIENTE)')
         arch.close()
         arch = open(f'file/{titule}', 'a')
-        arch.write(f'\n     ({self.set_description(description = input('Ingrese descripcion'))})')
+        arch.write(f'\n     ({self.set_description()})')
         arch.close()
         arch = open(f'file/{titule}', 'a')
-        arch.write(f'\n      PRIORIDAD {'correcion'}]\n----------------------------------------')
+        arch.write(f'\n     PRIORIDAD {self.priority()}\n-------------------------------------')
         arch.close()
 
 
-#nota mental - la validacion de prioridad habria que hacerlo con fecha, comparar fecha de tarea por hacer con la fecha actual
-#y segun los dias que falten por hacerla poner su prioridad, tipo si es en 3 dias que hay que terminar la tarea que sea ALTA
-#entonces dependiendo eso, reestructurar save en la parte prioridad
-#modificar set priority en la clase padre, para que pida fecha y compare con la actual para luego tomarlo con validar prioridad y usarlo en save, pilas!!
-
-print(t_day())
+teamo = M_Homework()
+teamo.save('teamo_Karencita')
