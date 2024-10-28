@@ -15,19 +15,32 @@ def t_day(): #Funcion que da fecha actual, la convierte en string y luego la alm
 
 class Homework: #Clase Padre - se usará más adelante para el gestor
     def __init__(self):
+        self.archive = ''
         self.name = ''
         self.description = ''
         self.date = ''
+        self.number = 0
 
-    def get_all(self): #Me muestra toda la info de la tarea y valida si hay algo que mostrar o no
-        if self.name != '' and self.description != '' and self.priority != '':
-            return f'''
-                ☃︎{self.name}
-                    ({self.description})
-                PRIORIDAD {self.priority.upper()}
-            '''
-        else:
-            print('No hay nada que mostrar!')
+    def get_archive(self):
+        return self.archive
+
+    def get_number(self):
+        return self.number
+
+    def set_number(self):
+        self.number += 1
+        return self.number
+
+    def set_archive(self, name):
+        array = name.split(' ')
+        array.append('.txt')
+        name_archive = ''
+        for i in range(len(array)):
+            name_archive += array[i]
+        self.archive = name_archive
+        return self.archive
+
+
 
     def set_name(self):#Cambia nombre y valida si mantiene limite de palabras
         while True:
@@ -107,10 +120,10 @@ class M_Homework(Homework):#Clase de gestion de tarea - hereda la clase homework
 
 
 
-    def save(self, titule): # guardar(crear) archivo con tarea inicial
-        titule += '.txt'
+    def save(self): # guardar(crear) archivo con tarea inicial
+        titule = self.set_archive(input('Ingrese nombre de archivo : '))
         arch = open(f'file/{titule}', 'w')
-        arch.write(f'[☺︎ {self.set_name()} (PENDIENTE)')
+        arch.write(f'[{self.set_number()} ☺︎ {self.set_name()} (PENDIENTE)')
         arch.close()
         arch = open(f'file/{titule}', 'a')
         arch.write(f'\n     ({self.set_description()})')
@@ -119,6 +132,22 @@ class M_Homework(Homework):#Clase de gestion de tarea - hereda la clase homework
         arch.write(f'\n     PRIORIDAD {self.priority()}\n-------------------------------------')
         arch.close()
 
+    def add(self):
+        archive = self.get_archive()
+        new = open(f'file/{archive}', 'a')
+        new.write(f'\n[{self.set_number()} ☺︎ {self.set_name()} (PENDIENTE)')
+        new.close()
+        new = open(f'file/{archive}', 'a')
+        new.write(f'\n     ({self.set_description()})')
+        new.close()
+        new = open(f'file/{archive}', 'a')
+        new.write(f'\n     PRIORIDAD {self.priority()}\n-------------------------------------')
+        new.close()
 
-teamo = M_Homework()
-teamo.save('teamo_Karencita')
+hh = M_Homework()
+hh.save()
+hh.add()
+hh.add()
+
+    
+
