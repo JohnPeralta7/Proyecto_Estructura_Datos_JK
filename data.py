@@ -145,3 +145,16 @@ class M_Homework(Homework):#Clase de gestion de tarea - hereda la clase homework
         new.write(f'\n     PRIORIDAD {self.priority()}\n-------------------------------------')
         new.close()
 
+    def delete(self):
+        archive = self.get_archive()
+        with open(f'file/{archive}', 'r') as archivee:
+            lines = archivee.readlines()
+        with open(f'file/{archive}', 'w') as archivee:
+            word = int(input('Ingresa el numero de la tarea que quieras eliminar: '))
+            i = 0
+            while i < len(lines):
+                if i == word - 1:
+                    i += 4
+                else:
+                    archivee.write(lines[i])
+                    i += 1
