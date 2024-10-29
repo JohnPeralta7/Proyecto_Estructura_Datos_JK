@@ -1,3 +1,4 @@
+import os
 from datetime import datetime
 now = datetime.now()
 def num_words(args): #funcion que da cantidad de palabras
@@ -143,11 +144,4 @@ class M_Homework(Homework):#Clase de gestion de tarea - hereda la clase homework
         new = open(f'file/{archive}', 'a')
         new.write(f'\n     PRIORIDAD {self.priority()}\n-------------------------------------')
         new.close()
-
-hh = M_Homework()
-hh.save()
-hh.add()
-hh.add()
-
-    
 
