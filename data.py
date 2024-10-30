@@ -149,12 +149,23 @@ class M_Homework(Homework):#Clase de gestion de tarea - hereda la clase homework
         archive = self.get_archive()
         with open(f'file/{archive}', 'r') as archivee:
             lines = archivee.readlines()
-        with open(f'file/{archive}', 'w') as archivee:
+        while True:
             word = int(input('Ingresa el numero de la tarea que quieras eliminar: '))
+            if 1 <= word <= len(lines) // 4:
+                break
+            else:
+                print('Ingrese un numero de tarea existente')
+        with open(f'file/{archive}', 'w') as archivee:
             i = 0
             while i < len(lines):
-                if i == word - 1:
+                if (i // 4) + 1 == word:
                     i += 4
                 else:
                     archivee.write(lines[i])
                     i += 1
+
+    def show(self):
+        archive = self.get_archive()
+        show_it = open(f'file/{archive}', 'r')
+        print(show_it.read())
+        show_it.close()
