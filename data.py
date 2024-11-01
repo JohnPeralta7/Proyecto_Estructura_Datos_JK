@@ -169,3 +169,35 @@ class M_Homework(Homework):#Clase de gestion de tarea - hereda la clase homework
         show_it = open(f'file/{archive}', 'r')
         print(show_it.read())
         show_it.close()
+
+    def process(self): #cada que el user presiona procesar(interfaz), la tarea cambiara de pend a finalizado
+        archive = self.get_archive()
+        with open(f'file/{archive}', 'r') as archivee:
+            lines = archivee.readlines()
+        find = False
+        with open(f'file/{archive}', 'w') as archivee:
+            for line in lines:
+                if '(PENDIENTE)' in line and not find:
+                    line = line.replace('(PENDIENTE)', '(FINALIZADO)')
+                    find = True
+                archivee.write(line)
+
+    def organize(self): #ordenara dependiendo de la fecha de entrega, su prioridad
+        archive = self.get_archive()
+        category = {'ALTA': [], 'MEDIA' : [], 'BAJA' : [], 'CADUCADO' : []} #se creo un diccionario para ahi almacenar las listas
+        with open(f'file/{archive}', 'r') as archivee:
+            lines = archivee.readlines()
+            for i in range(0, len(lines), 4):
+                t = lines[i:i + 4]
+                if 'ALTA' in t[2]:
+                    category['ALTA'].append(t)
+                elif 'MEDIA' in t[2]:
+                    category['MEDIA'].append(t)
+                elif 'BAJA' in t[2]:
+                    category['BAJA'].append(t)
+                else:
+                    category['CADUCADO'].append(t)
+        with open(f'file/{archive}', 'w') as archivee:
+            for prio in ['ALTA', 'MEDIA', 'BAJA', 'CADUCADO']:
+                for t in category[prio]:
+                    archivee.writelines(t)
