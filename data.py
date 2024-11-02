@@ -123,8 +123,8 @@ class M_Homework(Homework):#Clase de gestion de tarea - hereda la clase homework
 
     def save(self): # guardar(crear) archivo con tarea inicial
         titule = self.set_archive(input('Ingrese nombre de archivo : '))
-        arch = open(f'file/{titule}', 'w')
-        arch.write(f'[{self.set_number()} ☺︎ {self.set_name()} (PENDIENTE)')
+        arch = open(f'file/{titule}', 'w', encoding="utf-8")
+        arch.write(f'[{self.set_number()}︎ {self.set_name()} (PENDIENTE)')
         arch.close()
         arch = open(f'file/{titule}', 'a')
         arch.write(f'\n     ({self.set_description()})')
@@ -135,19 +135,19 @@ class M_Homework(Homework):#Clase de gestion de tarea - hereda la clase homework
 
     def add(self):
         archive = self.get_archive()
-        new = open(f'file/{archive}', 'a')
+        new = open(f'file/{archive}', 'a', encoding="utf-8")
         new.write(f'\n[{self.set_number()} ☺︎ {self.set_name()} (PENDIENTE)')
         new.close()
-        new = open(f'file/{archive}', 'a')
+        new = open(f'file/{archive}', 'a', encoding="utf-8")
         new.write(f'\n     ({self.set_description()})')
         new.close()
-        new = open(f'file/{archive}', 'a')
+        new = open(f'file/{archive}', 'a', encoding="utf-8")
         new.write(f'\n     PRIORIDAD {self.priority()}\n-------------------------------------')
         new.close()
 
     def delete(self):
         archive = self.get_archive()
-        with open(f'file/{archive}', 'r') as archivee:
+        with open(f'file/{archive}', 'r', encoding="utf-8") as archivee:
             lines = archivee.readlines()
         while True:
             word = int(input('Ingresa el numero de la tarea que quieras eliminar: '))
@@ -155,7 +155,7 @@ class M_Homework(Homework):#Clase de gestion de tarea - hereda la clase homework
                 break
             else:
                 print('Ingrese un numero de tarea existente')
-        with open(f'file/{archive}', 'w') as archivee:
+        with open(f'file/{archive}', 'w', encoding="utf-8") as archivee:
             i = 0
             while i < len(lines):
                 if (i // 4) + 1 == word:
@@ -166,16 +166,16 @@ class M_Homework(Homework):#Clase de gestion de tarea - hereda la clase homework
 
     def show(self):
         archive = self.get_archive()
-        show_it = open(f'file/{archive}', 'r')
+        show_it = open(f'file/{archive}', 'r', encoding="utf-8")
         print(show_it.read())
         show_it.close()
 
     def process(self): #cada que el user presiona procesar(interfaz), la tarea cambiara de pend a finalizado
         archive = self.get_archive()
-        with open(f'file/{archive}', 'r') as archivee:
+        with open(f'file/{archive}', 'r', encoding="utf-8") as archivee:
             lines = archivee.readlines()
         find = False
-        with open(f'file/{archive}', 'w') as archivee:
+        with open(f'file/{archive}', 'w', encoding="utf-8") as archivee:
             for line in lines:
                 if '(PENDIENTE)' in line and not find:
                     line = line.replace('(PENDIENTE)', '(FINALIZADO)')
@@ -185,7 +185,7 @@ class M_Homework(Homework):#Clase de gestion de tarea - hereda la clase homework
     def organize(self): #ordenara dependiendo de la fecha de entrega, su prioridad
         archive = self.get_archive()
         category = {'ALTA': [], 'MEDIA' : [], 'BAJA' : [], 'CADUCADO' : []} #se creo un diccionario para ahi almacenar las listas
-        with open(f'file/{archive}', 'r') as archivee:
+        with open(f'file/{archive}', 'r', encoding="utf-8") as archivee:
             lines = archivee.readlines()
             for i in range(0, len(lines), 4):
                 t = lines[i:i + 4]
@@ -197,7 +197,17 @@ class M_Homework(Homework):#Clase de gestion de tarea - hereda la clase homework
                     category['BAJA'].append(t)
                 else:
                     category['CADUCADO'].append(t)
-        with open(f'file/{archive}', 'w') as archivee:
+        with open(f'file/{archive}', 'w', encoding="utf-8") as archivee:
             for prio in ['ALTA', 'MEDIA', 'BAJA', 'CADUCADO']:
                 for t in category[prio]:
                     archivee.writelines(t)
+
+
+
+tyler = M_Homework()
+tyler.save()
+tyler.add()
+tyler.delete()
+tyler.show()
+tyler.process()
+tyler.show()
